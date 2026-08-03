@@ -1,6 +1,6 @@
 from fastapi import FastAPI, WebSocket
 from fastapi.middleware.cors import CORSMiddleware
-from price_engine import generate_price
+from price_engine import generate_prices
 import asyncio
 
 app = FastAPI()
@@ -20,11 +20,10 @@ def read_root():
 @app.websocket("/ws/price")
 async def price_stream(websocket: WebSocket):
     await websocket.accept()
-    price = 500.0
     try:
         while True:
-            price = generate_price(price)
-            await websocket.send_json({"price": price})
+            prices = generate_prices()
+            await websocket.send_json(prices)
             await asyncio.sleep(1)
     except Exception:
         pass

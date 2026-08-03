@@ -1,14 +1,17 @@
 import random
-import time
 
-def generate_price(current_price: float) -> float:
-    change = random.uniform(-2, 2)
-    new_price = current_price + change
-    return round(new_price, 2)
+SYMBOLS = ['AAPL', 'MSFT', 'NVDA', 'SPY', 'TSLA']
 
-if __name__ == "__main__":
-    price = 500.0
-    while True:
-        price = generate_price(price)
-        print(f"Price: {price}")
-        time.sleep(1)
+prices = {
+    'AAPL': 189.56,
+    'MSFT': 415.82,
+    'NVDA': 875.35,
+    'SPY': 521.34,
+    'TSLA': 218.32,
+}
+
+def generate_prices():
+    for symbol in SYMBOLS:
+        change = random.uniform(-2, 2)
+        prices[symbol] = round(prices[symbol] + change, 2)
+    return prices.copy()
