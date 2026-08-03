@@ -12,6 +12,6 @@ prices = {
 
 def generate_prices():
     for symbol in SYMBOLS:
-        change = random.uniform(-2, 2)
+        change = random.uniform(-0.5, 0.5)  # smaller swings instead of -2 to 2
         prices[symbol] = round(prices[symbol] + change, 2)
-    return prices.copy()
+    return prices.copy()    
