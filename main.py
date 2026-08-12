@@ -41,7 +41,10 @@ async def price_stream(websocket: WebSocket):
     try:
         while True:
             if portfolio_locked:
-                await websocket.send_json({"locked": True})
+                try:
+                    await websocket.send_json({"locked": True})
+                except Exception:
+                    break
                 await asyncio.sleep(1)
                 continue
 
@@ -52,8 +55,8 @@ async def price_stream(websocket: WebSocket):
                 try:
                     features = calculate_features(symbol)
                     if features:
-                        return_value, ma5, ma10 = features
-                        confidence = predict_buy_confidence(return_value, ma5, ma10)
+                        return_value, ma5, ma10, macd, rsi, volatility, momentum = features
+                        confidence = predict_buy_confidence(return_value, ma5, ma10, macd, rsi, volatility, momentum)
                     else:
                         confidence = 50.0
 
@@ -69,7 +72,10 @@ async def price_stream(websocket: WebSocket):
                         "buyConfidence": 50.0
                     }
 
-            await websocket.send_json(response)
+            try:
+                await websocket.send_json(response)
+            except Exception:
+                break
             await asyncio.sleep(1)
 
     except WebSocketDisconnect:
@@ -78,3 +84,5 @@ async def price_stream(websocket: WebSocket):
         print("\n========= BACKEND ERROR =========")
         traceback.print_exc()
         print("================================")
+    finally:
+        print("🔌 WebSocket connection closed, loop exited cleanly")
