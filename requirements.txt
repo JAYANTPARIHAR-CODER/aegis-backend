@@ -4,3 +4,4 @@ pydantic
 starlette
 typing-extensions
 numpy
+joblib
