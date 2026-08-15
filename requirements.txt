@@ -5,3 +5,5 @@ starlette
 typing-extensions
 numpy
 joblib
+pandas
+scikit-learn
